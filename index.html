@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danse Ton Flow — Kally Bias</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:       #C2728A;
+      --rose-dark:  #a85c75;
+      --rose-light: #F2D4DC;
+      --cream:      #FDF8F4;
+      --warm:       #FAF5EF;
+      --gold:       #C9A96E;
+      --dark:       #1A0E0E;
+      --charcoal:   #2B1818;
+      --text:       #3A2828;
+      --muted:      #7A5C60;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      color: var(--text);
+      background: var(--cream);
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; }
+
+    /* ── UTILITY ─────────────────────────────────────── */
+    .tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    .h2 {
+      font-size: clamp(2rem, 3.8vw, 3rem);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--charcoal);
+      margin-bottom: 18px;
+    }
+    .h2 em { font-style: italic; color: var(--rose); }
+
+    .rule {
+      width: 48px;
+      height: 1px;
+      background: var(--gold);
+      margin: 20px 0;
+    }
+
+    .prose p { color: var(--muted); margin-bottom: 16px; line-height: 1.9; }
+    .prose p:last-child { margin-bottom: 0; }
+
+    .italic-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--rose);
+      line-height: 1.65;
+    }
+
+    /* ── BUTTONS ─────────────────────────────────────── */
+    .btn {
+      display: inline-block;
+      padding: 12px 32px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--rose);
+      color: var(--rose);
+      background: transparent;
+      cursor: pointer;
+      transition: background .28s, color .28s;
+    }
+    .btn:hover { background: var(--rose); color: #fff; }
+
+    .btn-gold  { border-color: var(--gold); color: var(--gold); }
+    .btn-gold:hover { background: var(--gold); color: var(--dark); }
+
+    .btn-solid { background: var(--rose); color: #fff; border-color: var(--rose); }
+    .btn-solid:hover { background: var(--rose-dark); border-color: var(--rose-dark); }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 300;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 52px;
+      background: rgba(253,248,244,.93);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,116,138,.1);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 28px rgba(42,24,24,.09); }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+      color: var(--rose);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.7rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      transition: color .25s;
+    }
+    .nav-links a:hover { color: var(--rose); }
+
+    .burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .burger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--text);
+      transition: all .3s;
+    }
+
+    /* ── HERO ────────────────────────────────────────── */
+    #accueil {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .hero-visual {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .hero-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+    /* fade into bg on the right */
+    .hero-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, transparent 55%, var(--cream) 100%);
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 68px 80px 52px;
+    }
+
+    .hero-h1 {
+      font-size: clamp(2.5rem, 4.5vw, 4rem);
+      font-weight: 300;
+      line-height: 1.12;
+      color: var(--charcoal);
+      margin-bottom: 20px;
+    }
+    .hero-h1 em { font-style: italic; color: var(--rose); }
+
+    .hero-text {
+      color: var(--muted);
+      font-size: .98rem;
+      max-width: 400px;
+      line-height: 1.85;
+      margin-bottom: 32px;
+    }
+
+    .flowers { font-size: 1.1rem; letter-spacing: .3em; color: var(--rose); margin: 18px 0; }
+
+    /* ── SECTIONS LAYOUT ─────────────────────────────── */
+    .sec {
+      padding: 108px 80px;
+    }
+    .sec-light { background: var(--warm); }
+    .sec-dark  { background: var(--dark); color: #F0E6E0; }
+    .sec-dark .h2 { color: #F0E6E0; }
+    .sec-dark .tag { color: var(--gold); }
+    .sec-dark .rule { background: var(--gold); }
+
+    .sec-charcoal { background: var(--charcoal); color: #F0E6E0; }
+    .sec-charcoal .h2 { color: #F0E6E0; }
+    .sec-charcoal .tag { color: var(--gold); }
+    .sec-charcoal .rule { background: var(--gold); }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 88px;
+      align-items: center;
+    }
+    .two-col.top { align-items: start; }
+
+    /* ── MEDIA FRAMES ────────────────────────────────── */
+    .frame {
+      border-radius: 2px;
+      overflow: hidden;
+      display: block;
+    }
+    .frame img, .frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .frame.portrait { aspect-ratio: 9/16; max-height: 630px; }
+    .frame.tall      { aspect-ratio: 3/4; }
+    .frame.square    { aspect-ratio: 1; }
+
+    /* ── STEPS (Ateliers) ────────────────────────────── */
+    .steps { display: flex; flex-direction: column; gap: 24px; margin: 38px 0; }
+    .step  { display: flex; gap: 16px; align-items: flex-start; }
+    .step-ico { font-size: 1rem; flex-shrink: 0; margin-top: 4px; }
+    .step h4  {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--charcoal);
+      margin-bottom: 2px;
+    }
+    .step p { font-size: .86rem; color: var(--muted); }
+
+    /* ── PACKS (Mariage) ─────────────────────────────── */
+    .pack-list { display: flex; flex-direction: column; gap: 26px; margin-top: 38px; }
+    .pack {
+      border: 1px solid rgba(201,169,110,.22);
+      padding: 30px;
+      transition: border-color .3s;
+    }
+    .pack:hover { border-color: var(--gold); }
+    .pack-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      color: var(--gold);
+      margin-bottom: 9px;
+    }
+    .pack-body {
+      font-size: .86rem;
+      color: rgba(240,230,224,.58);
+      line-height: 1.7;
+      margin-bottom: 13px;
+    }
+    .pack ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .pack li {
+      font-size: .8rem;
+      color: rgba(240,230,224,.45);
+      padding-left: 15px;
+      position: relative;
+    }
+    .pack li::before { content: '—'; position: absolute; left: 0; color: var(--gold); }
+
+    /* ── FORMULES (EVJF) ─────────────────────────────── */
+    .formule {
+      background: white;
+      padding: 32px;
+      border-left: 3px solid var(--rose);
+      margin-bottom: 26px;
+    }
+    .formule.sun { border-left-color: var(--gold); }
+    .formule-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--charcoal);
+      margin-bottom: 4px;
+    }
+    .formule-sub {
+      font-size: .72rem;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 13px;
+    }
+    .formule.sun .formule-sub { color: var(--gold); }
+    .formule p.body { font-size: .86rem; color: var(--muted); margin-bottom: 13px; line-height: 1.7; }
+    .formule ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .formule li {
+      font-size: .83rem;
+      color: var(--muted);
+      padding-left: 20px;
+      position: relative;
+    }
+    .formule li::before { content: '🌸'; position: absolute; left: 0; font-size: .62rem; top: 4px; }
+
+    /* ── BLOG ────────────────────────────────────────── */
+    .blog-center { max-width: 500px; margin: 0 auto; text-align: center; }
+    .blog-bloom  { font-size: 1.8rem; display: block; margin-bottom: 18px; }
+    .blog-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.45rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    /* ── CONTACT ─────────────────────────────────────── */
+    .contact-blurb {
+      font-size: .94rem;
+      color: rgba(240,230,224,.55);
+      max-width: 320px;
+      line-height: 1.9;
+      margin-bottom: 38px;
+    }
+    .ci-list { display: flex; flex-direction: column; gap: 20px; }
+    .ci-label {
+      font-size: .67rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 3px;
+    }
+    .ci-value { font-size: .93rem; color: rgba(240,230,224,.78); }
+    .ci-value a { color: rgba(240,230,224,.78); text-decoration: none; transition: color .25s; }
+    .ci-value a:hover { color: var(--gold); }
+
+    form { display: flex; flex-direction: column; gap: 20px; }
+    .fg  { display: flex; flex-direction: column; gap: 7px; }
+    .fg label {
+      font-size: .67rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(240,230,224,.38);
+    }
+    .fg input, .fg textarea, .fg select {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(240,230,224,.16);
+      padding: 10px 0;
+      color: #F0E6E0;
+      font-family: 'Lato', sans-serif;
+      font-size: .92rem;
+      font-weight: 300;
+      outline: none;
+      width: 100%;
+      transition: border-color .25s;
+    }
+    .fg input:focus, .fg textarea:focus, .fg select:focus { border-bottom-color: var(--gold); }
+    .fg textarea { resize: none; min-height: 86px; }
+    .fg select option { background: var(--charcoal); }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: var(--dark);
+      color: rgba(240,230,224,.28);
+      text-align: center;
+      padding: 26px;
+      font-size: .76rem;
+      letter-spacing: .07em;
+    }
+    footer strong { color: var(--rose); font-weight: 400; }
+
+    /* ── REVEAL ──────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    .reveal.vis { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 960px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .burger { display: flex; }
+
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 60px; left: 0; right: 0;
+        background: rgba(253,248,244,.97);
+        padding: 22px 28px;
+        gap: 18px;
+        border-bottom: 1px solid var(--rose-light);
+        z-index: 299;
+      }
+
+      #accueil { grid-template-columns: 1fr; min-height: auto; }
+      .hero-visual { height: 62vw; }
+      .hero-visual::after {
+        background: linear-gradient(to top, var(--cream) 4%, transparent 38%);
+      }
+      .hero-copy { padding: 36px 26px 72px; }
+      .hero-h1 { font-size: 2.1rem; }
+
+      .sec { padding: 76px 26px; }
+
+      .two-col { grid-template-columns: 1fr; gap: 46px; }
+
+      .frame.portrait { max-height: 72vw; }
+      .frame.tall     { aspect-ratio: 4/3; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ════════════════════════════════════════════ -->
+<nav id="nav">
+  <a href="#accueil" class="nav-logo">Danse Ton Flow</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#ateliers"   onclick="cm()">Ateliers</a></li>
+    <li><a href="#mariage"    onclick="cm()">Mariage</a></li>
+    <li><a href="#evjf"       onclick="cm()">EVJF</a></li>
+    <li><a href="#qui-suis-je" onclick="cm()">Qui suis-je</a></li>
+    <li><a href="#blog"       onclick="cm()">Blog</a></li>
+    <li><a href="#contact"    onclick="cm()">Contact</a></li>
+  </ul>
+  <button class="burger" id="burger" aria-label="Menu" onclick="tm()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+
+<!-- ═══ ACCUEIL ══════════════════════════════════════ -->
+<section id="accueil">
+  <div class="hero-visual">
+    <img src="assets/Accueil%20ici%20commence.jpeg" alt="Danse Ton Flow – Kally Bias">
+  </div>
+  <div class="hero-copy">
+    <span class="tag">Danse Intuitive Féminine</span>
+    <h1 class="hero-h1">Ici commence<br>un <em>voyage…</em></h1>
+    <div class="rule"></div>
+    <p class="hero-text">
+      Celui de la femme qui ose retrouver le langage secret de son corps
+      et la magie de son essence.
+    </p>
+    <div class="flowers">🌸 🌸 🌸 🌸 🌸</div>
+    <a href="#ateliers" class="btn">Découvrir les ateliers</a>
+  </div>
+</section>
+
+
+<!-- ═══ DANSE INTUITIVE ══════════════════════════════ -->
+<section class="sec sec-light" id="danse-intuitive">
+  <div class="two-col reveal">
+    <div class="frame portrait">
+      <video autoplay muted loop playsinline>
+        <source src="assets/Vid%C3%A9o%20danse%20intuitive%20parc.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div>
+      <span class="tag">L'essence</span>
+      <h2 class="h2">Danse <em>Intuitive</em></h2>
+      <div class="rule"></div>
+      <div class="prose">
+        <p>Quand on ferme les yeux, que l'on laisse la musique caresser le corps, les gestes se libèrent de toute attente.</p>
+        <p>Plus de pas à retenir, plus de forme à respecter : seulement le souffle, les pulsations intérieures et la vie qui cherche à s'exprimer.</p>
+        <p>Entourée de femmes, on ose déposer les masques, les injonctions, les lourdeurs du quotidien. Le cercle devient un cocon, un lieu où la vulnérabilité rencontre la puissance.</p>
+        <p>Danser ensemble, c'est réveiller la mémoire ancienne des corps qui se soutiennent, se répondent, se célèbrent.</p>
+        <p>Et chacune repart un peu plus ancrée, un peu plus vivante, un peu plus souveraine.</p>
+        <p class="italic-quote">C'est un chemin vers soi qui s'ouvre… et il est infiniment précieux.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ ATELIERS ═════════════════════════════════════ -->
+<section class="sec" id="ateliers">
+  <div class="two-col reveal">
+    <div>
+      <span class="tag">Un voyage intérieur</span>
+      <h2 class="h2">Ateliers <em>Danse Ton Flow</em></h2>
+      <div class="rule"></div>
+      <p style="color:var(--muted); max-width:450px;">
+        Une invitation à déposer le quotidien et à plonger dans un espace hors du temps.
+      </p>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step-ico">🌸</span>
+          <div><h4>Cercle d'ouverture</h4>
+          <p>Un moment pour se rencontrer, poser ses intentions, ouvrir le cœur.</p></div>
+        </div>
+        <div class="step">
+          <span class="step-ico">🌸</span>
+          <div><h4>Méditation en mouvement</h4>
+          <p>Bercée par une ambiance envoûtante, le corps s'éveille, s'assouplit, se relie au souffle.</p></div>
+        </div>
+        <div class="step">
+          <span class="step-ico">🌸</span>
+          <div><h4>Jeux dansés & guidance</h4>
+          <p>Laisser émerger la spontanéité, se laisser guider par la voix, explorer le mouvement.</p></div>
+        </div>
+        <div class="step">
+          <span class="step-ico">🌸</span>
+          <div><h4>Danse libre extatique</h4>
+          <p>L'abandon total, la joie, la liberté retrouvée.</p></div>
+        </div>
+        <div class="step">
+          <span class="step-ico">🌸</span>
+          <div><h4>Pause gourmande</h4>
+          <p>Savourer, partager, rire ensemble, créer de nouveaux liens.</p></div>
+        </div>
+        <div class="step">
+          <span class="step-ico">🌸</span>
+          <div><h4>Relaxation allongée</h4>
+          <p>Pour terminer par une caresse pour le corps et l'esprit.</p></div>
+        </div>
+      </div>
+
+      <p style="color:var(--muted); font-style:italic; font-size:.92rem; max-width:450px; margin-bottom:34px;">
+        Si tu cherches un espace où tu peux respirer, danser, te sentir libre et femme parmi les femmes… les cercles Danse Ton Flow sont faits pour toi.
+      </p>
+      <a href="#contact" class="btn">Je m'inscris</a>
+    </div>
+
+    <div class="frame portrait" style="max-height:660px;">
+      <video autoplay muted loop playsinline>
+        <source src="assets/Atelier%20nomade.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ MARIAGE ══════════════════════════════════════ -->
+<section class="sec sec-dark" id="mariage">
+  <div class="two-col top reveal">
+    <div>
+      <span class="tag">💍 Pour votre jour J</span>
+      <h2 class="h2">Ouverture <em>de Bal</em></h2>
+      <div class="rule"></div>
+      <p style="color:rgba(240,230,224,.55); max-width:480px; line-height:1.9; margin-bottom:12px;">
+        Parce que le jour de votre mariage mérite d'être vécu pleinement et de laisser une empreinte lumineuse dans vos souvenirs…
+      </p>
+      <p style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem; color:rgba(240,230,224,.5); margin-bottom:40px;">
+        Une chorégraphie sur mesure, simple, accessible et remplie d'émotion — même si vous n'avez jamais dansé.
+      </p>
+
+      <p class="tag" style="margin-bottom:18px;">Nos formules</p>
+      <div class="pack-list">
+        <div class="pack">
+          <div class="pack-name">Pack Essentiel — 5 heures</div>
+          <p class="pack-body">Idéal pour une ouverture de bal simple, fluide et élégante. Parfait pour se sentir à l'aise et savourer l'instant.</p>
+          <ul>
+            <li>Cours en couple</li>
+            <li>Chorégraphie sur mesure</li>
+            <li>Accompagnement bienveillant et progressif</li>
+            <li>Planning flexible (semaine ou week-end)</li>
+            <li>Salle incluse — Paris / 77</li>
+          </ul>
+        </div>
+        <div class="pack">
+          <div class="pack-name">Pack Sérénité — 8 heures <span style="font-size:.78rem; color:var(--rose);">dont 1 h offerte</span></div>
+          <p class="pack-body">Pour les couples qui veulent plus de confort et de confiance. L'heure offerte : une répétition finale sans pression.</p>
+          <ul>
+            <li>Cours en couple</li>
+            <li>Chorégraphie sur mesure</li>
+            <li>Connexion, aisance, présence</li>
+            <li>1 heure offerte — répétition finale détendue</li>
+            <li>Salle incluse — Paris / 77</li>
+          </ul>
+        </div>
+      </div>
+      <a href="#contact" class="btn btn-gold" style="margin-top:38px;">Demander un devis</a>
+    </div>
+
+    <div class="frame tall">
+      <img src="assets/Bal.jpeg" alt="Ouverture de bal – mariage"
+           style="filter:brightness(.82) sepia(.12);">
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ EVJF ══════════════════════════════════════════ -->
+<section class="sec sec-light" id="evjf">
+  <div class="two-col top reveal">
+    <div class="frame tall">
+      <img src="assets/EVJF.jpeg" alt="EVJF Danse Ton Flow">
+    </div>
+    <div>
+      <span class="tag">✨ Parenthèse entre femmes</span>
+      <h2 class="h2">Offre <em>EVJF</em></h2>
+      <div class="rule"></div>
+      <p style="color:var(--muted); margin-bottom:10px;">
+        Parce qu'un EVJF peut être aussi unique que la femme que l'on célèbre — une parenthèse de 2 heures mêlant cercle de femmes, danse et moments de partage, comme une bulle hors du temps.
+      </p>
+      <p style="font-size:.82rem; color:var(--muted); margin-bottom:36px;">
+        Durée : 2 h &nbsp;·&nbsp; En journée (semaine ou week-end) &nbsp;·&nbsp; Paris ou 77
+      </p>
+
+      <div class="formule">
+        <div class="formule-name">Formule Pierre de Lune</div>
+        <div class="formule-sub">Cercle & reconnexion</div>
+        <p class="body">Une expérience douce et profonde pour honorer la future mariée et le lien entre femmes.</p>
+        <ul>
+          <li>Cercle de femmes et ouverture symbolique</li>
+          <li>Voyage intérieur méditatif en musique</li>
+          <li>Danse intuitive</li>
+          <li>Danse extatique (libre et guidée)</li>
+          <li>Temps de partage : thé / infusion + salade de fruits frais</li>
+        </ul>
+      </div>
+
+      <div class="formule sun">
+        <div class="formule-name">Formule Pierre de Soleil</div>
+        <div class="formule-sub">Rythmes du soleil</div>
+        <p class="body">Fun, rires, énergie, complicité… un boost de joie qui met tout le monde en mouvement !</p>
+        <ul>
+          <li>Cercle de femmes et ouverture symbolique</li>
+          <li>Mise en énergie corporelle</li>
+          <li>Initiation aux danses latines (salsa, bachata, cha cha cha, merengue)</li>
+          <li>Danse libre, rythmée et ludique</li>
+          <li>Pause conviviale : thé / infusion + salade de fruits frais</li>
+        </ul>
+      </div>
+
+      <a href="#contact" class="btn btn-solid" style="margin-top:6px;">Réserver une date</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ QUI SUIS-JE ══════════════════════════════════ -->
+<section class="sec" id="qui-suis-je">
+  <div class="two-col reveal">
+    <div class="frame tall">
+      <img src="assets/Quisuisje.jpeg" alt="Kally Bias – Danse Ton Flow">
+    </div>
+    <div>
+      <span class="tag">À propos</span>
+      <h2 class="h2">Qui <em>suis-je ?</em></h2>
+      <div class="rule"></div>
+      <div class="prose">
+        <p>Formée à l'École des danses latines et tropicales de Paris, professeure de salsa et de lady latino depuis 2006, j'anime désormais des cercles de danse intuitive féminine.</p>
+        <p>Je m'appelle <strong style="color:var(--charcoal); font-weight:400;">Kally Bias</strong> et j'accompagne chaque femme à retrouver le plaisir de bouger, en se reconnectant à son corps et à sa puissance féminine.</p>
+        <p>J'accompagne également les couples débutants dans une exploration de la connexion et de la complicité à travers la salsa, la bachata, le merengue, mais aussi des rythmes plus doux comme le slow jam — dans une approche sensible et bienveillante.</p>
+      </div>
+
+      <!-- Ce qui m'anime -->
+      <div style="margin-top:52px; padding-top:52px; border-top:1px solid var(--rose-light);">
+        <span class="tag">Ce qui m'anime</span>
+        <div class="two-col" style="gap:40px; margin-top:16px; align-items:center;">
+          <div class="prose">
+            <p>Inspirée par le désir d'alléger la charge mentale que nous portons si souvent, j'imagine des espaces doux et bienveillants où chacune peut se déposer, respirer, partager, libérer la parole, sourire, se sentir écoutée, renouer avec sa créativité, sa légèreté, sa vitalité et sa joie profonde.</p>
+          </div>
+          <div class="frame square">
+            <img src="assets/Cequimanime.jpeg" alt="Ce qui m'anime – Kally Bias">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ BLOG ══════════════════════════════════════════ -->
+<section class="sec sec-light" id="blog" style="text-align:center;">
+  <div class="blog-center reveal">
+    <span class="tag" style="display:block;">Inspirations & rituels</span>
+    <h2 class="h2" style="text-align:center;">Le <em>Blog</em></h2>
+    <div class="rule" style="margin:20px auto;"></div>
+    <span class="blog-bloom">🌸</span>
+    <p class="blog-tagline">Des petits rappels et rituels doux<br>pour enchanter son quotidien…</p>
+    <p style="color:var(--muted); font-size:.88rem; margin-top:14px;">
+      Les articles arrivent bientôt. Revenez nous rendre visite !
+    </p>
+  </div>
+</section>
+
+
+<!-- ═══ CONTACT ══════════════════════════════════════ -->
+<section class="sec sec-charcoal" id="contact">
+  <div class="two-col top reveal">
+    <div>
+      <span class="tag">Parlons-nous</span>
+      <h2 class="h2">Contact</h2>
+      <div class="rule"></div>
+      <p class="contact-blurb">
+        Un message suffit parfois pour faire naître une belle aventure. Je vous lis avec attention et suis à votre écoute pour imaginer ensemble ce qui vous ressemble.
+      </p>
+      <div class="ci-list">
+        <div>
+          <p class="ci-label">Email</p>
+          <p class="ci-value"><a href="mailto:dansetonflow@yahoo.com">dansetonflow@yahoo.com</a></p>
+        </div>
+        <div>
+          <p class="ci-label">Instagram</p>
+          <p class="ci-value"><a href="https://instagram.com/danse.ton.flow" target="_blank" rel="noopener">@danse.ton.flow</a></p>
+        </div>
+        <div>
+          <p class="ci-label">Téléphone</p>
+          <p class="ci-value"><a href="tel:+33681592607">06.81.59.26.07</a></p>
+        </div>
+        <div>
+          <p class="ci-label">Lieu</p>
+          <p class="ci-value" style="color:rgba(240,230,224,.38);">Paris & Seine-et-Marne (77)</p>
+        </div>
+      </div>
+    </div>
+
+    <form id="cForm">
+      <div class="fg">
+        <label for="n">Votre prénom</label>
+        <input type="text" id="n" placeholder="Marie" required>
+      </div>
+      <div class="fg">
+        <label for="e">Votre email</label>
+        <input type="email" id="e" placeholder="marie@exemple.com" required>
+      </div>
+      <div class="fg">
+        <label for="s">Votre demande</label>
+        <select id="s">
+          <option value="">Choisir une option…</option>
+          <option>Atelier Danse Ton Flow</option>
+          <option>Mariage — Pack Essentiel (5 h)</option>
+          <option>Mariage — Pack Sérénité (8 h)</option>
+          <option>EVJF — Pierre de Lune</option>
+          <option>EVJF — Pierre de Soleil</option>
+          <option>Autre demande</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label for="m">Votre message</label>
+        <textarea id="m" placeholder="Parlez-moi de votre projet…"></textarea>
+      </div>
+      <button type="submit" class="btn btn-gold" id="sendBtn">Envoyer le message</button>
+    </form>
+  </div>
+</section>
+
+
+<!-- ═══ FOOTER ════════════════════════════════════════ -->
+<footer>
+  <p>© 2025 <strong>Danse Ton Flow</strong> · Kally Bias · Tous droits réservés</p>
+</footer>
+
+
+<script>
+  // ── nav scroll shadow ──────────────────────────────
+  const nav = document.getElementById('nav');
+  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
+
+  // ── mobile menu ────────────────────────────────────
+  function tm() { document.getElementById('navLinks').classList.toggle('open'); }
+  function cm() { document.getElementById('navLinks').classList.remove('open'); }
+
+  // ── scroll reveal ──────────────────────────────────
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ── contact form ───────────────────────────────────
+  document.getElementById('cForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('sendBtn');
+    btn.textContent = 'Message envoyé ✓';
+    btn.style.cssText += 'border-color:#8DC88D;color:#8DC88D;pointer-events:none';
+    setTimeout(() => {
+      btn.textContent = 'Envoyer le message';
+      btn.removeAttribute('style');
+      this.reset();
+    }, 4500);
+  });
+</script>
+</body>
+</html>
